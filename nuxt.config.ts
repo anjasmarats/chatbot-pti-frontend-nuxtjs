@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   css: [
     'bootstrap/dist/css/bootstrap.min.css',
     '~/assets/styles/style.css',
-    '~/assets/styles/dark-mode.css',
+    // '~/assets/styles/dark-mode.css',
   ],
   nitro: {
     routeRules: {

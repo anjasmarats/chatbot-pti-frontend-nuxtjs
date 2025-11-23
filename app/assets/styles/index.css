@@ -1,16 +1,16 @@
 .dashboard-link {
-                margin-left: 'auto';
-            display: 'flex';
-            align-items: center;
-            gap: '0.5rem';
-            text-decoration: none;
-            background: 'linear-gradient(90deg, #3a8dde 0%, #ff5858 100%)';
-            color: #fff;
-            padding: '0.5rem 1rem';
-            border-radius: 1.2rem;
-            font-weight: 600;
-            box-shadow: 0 2px 8px 0 rgba(58, 141, 222, 0.12);
-            transition: background 0.2s, transform 0.1s;
+                margin-left: "auto";
+              display: "flex";
+              align-items: "center";
+              gap: "0.5rem";
+              text-decoration: "none";
+              background: linear-gradient(90deg, #3a8dde 0%, #ff5858 100%);
+              color: "#fff";
+              padding: 0.5rem 1rem;
+              border-radius: 1.2rem;
+              font-weight: 600;
+              box-shadow: 0 2px 8px 0 rgba(58, 141, 222, 0.12);
+              transition: background 0.2s, transform 0.1s;
 }
 
 /* Background gradient with green, blue, red */
@@ -177,7 +177,8 @@
           transform: scale(1.15);
         }
         .send-btn:disabled {
-          color: #bbb;
+          color: #3a8dde;
+          opacity: 60%;
           cursor: not-allowed;
         }
         /* Animations */

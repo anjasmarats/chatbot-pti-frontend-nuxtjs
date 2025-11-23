@@ -3,7 +3,10 @@
     <div class="chat-container">
       <!-- Header -->
       <header class="chat-header">
-        <FaRobot :size="32" class="header-icon" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-robot" viewBox="0 0 16 16">
+  <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
+  <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
+</svg>
         <div>
           <h1 class="chat-title">AI Chatbot</h1>
           <p class="chat-desc">Selamat datang! Chatbot siap membantu Anda.</p>
@@ -15,8 +18,6 @@
           aria-label="Review Dashboard Analytics & Feedback"
           target="_blank"
           rel="noopener noreferrer"
-          @mouseover="handleLinkHover($event, true)"
-          @mouseout="handleLinkHover($event, false)"
         >
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
             <rect x="3" y="7" width="18" height="10" rx="2" fill="#fff" opacity="0.18"/>
@@ -26,7 +27,7 @@
             <circle cx="20" cy="6" r="2" fill="#ff5858"/>
             <circle cx="4" cy="6" r="2" fill="#43e97b"/>
           </svg>
-          <span style="font-size: 0.98rem">analisis</span>
+          <span style="font-size: 0.98rem" class="text-light text-decoration-none">analisis</span>
         </NuxtLink>
       </header>
 
@@ -45,13 +46,17 @@
         >
           <div class="bubble-header">
             <FaUserCircle v-if="message.type === 'user'" class="bubble-icon user" />
-            <FaRobot v-else class="bubble-icon bot" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-robot" viewBox="0 0 16 16">
+  <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
+  <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
+</svg>
             <span class="bubble-sender">
               {{ message.type === 'user' ? 'Anda' : 'Bot' }}
             </span>
             <span class="bubble-time">{{ message.time }}</span>
           </div>
-          <div class="bubble-text mb-2">{{ formatMessage(message.content || '') }}</div>
+          <!-- <div class="bubble-text mb-2">{{ formatMessage(message.content || '') }}</div> -->
+          <div class="bubble-text mb-2">{{ message.content }}</div>
           <div :class="`m-4 ${message.options ? '' : 'd-none'}`">
             <div v-if="message.options" class="message-options">
               <div
@@ -74,7 +79,10 @@
           aria-live="polite"
         >
           <div class="bubble-header">
-            <FaRobot class="bubble-icon bot" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-robot" viewBox="0 0 16 16">
+  <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
+  <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
+</svg>
             <span class="bubble-sender">Bot</span>
             <span class="bubble-time">&nbsp;</span>
           </div>
@@ -108,7 +116,9 @@
           aria-label="Kirim"
           :disabled="!inputMessage.trim()"
         >
-          <FaPaperPlane :size="22" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-send-fill" viewBox="0 0 16 16">
+  <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z"/>
+</svg>
         </button>
       </form>
     </div>
@@ -144,15 +154,6 @@ const FaUserCircle = makeIcon((size, attrs) =>
       h('circle', { cx: 12, cy: 12, r: 10, stroke: 'currentColor', 'stroke-width': 1.5, fill: 'none' }),
       h('circle', { cx: 12, cy: 10, r: 3, fill: 'currentColor' }),
       h('path', { d: 'M6 18c1.5-2 4-3 6-3s4.5 1 6 3', stroke: 'currentColor', 'stroke-width': 1.2, fill: 'none', 'stroke-linecap': 'round' })
-    ]
-  )
-);
-
-const FaPaperPlane = makeIcon((size, attrs) =>
-  h('svg', { ...attrs, width: size, height: size, viewBox: '0 0 24 24', fill: 'none', xmlns: 'http://www.w3.org/2000/svg' },
-    [
-      h('path', { d: 'M22 2L11 13', stroke: 'currentColor', 'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', fill: 'none' }),
-      h('path', { d: 'M22 2L15 22L11 13L2 9L22 2Z', stroke: 'currentColor', 'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', fill: 'currentColor', opacity: '0.15' })
     ]
   )
 );
@@ -287,7 +288,7 @@ const sendMessage = async (message: string | null, optionId: string | null = nul
       message: string;
       options?: Option[];
       requiresInput?: boolean;
-    }>('/api/chat/message', {
+    }>(`${url}/api/chat/message`, {
       method: 'POST',
       body: {
         sessionId: sessionId.value,
