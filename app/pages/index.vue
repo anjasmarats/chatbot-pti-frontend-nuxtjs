@@ -127,6 +127,10 @@
 
 <script setup lang="ts">
 import { h, defineComponent } from 'vue';
+const { token } = useToken()
+if (!token.value) {
+  console.error("error")
+}
 
 /* Lightweight inline icon components to avoid external dependency */
 const makeIcon = (renderFn: (size: number, attrs: Record<string, any>) => any) =>
@@ -136,17 +140,6 @@ const makeIcon = (renderFn: (size: number, attrs: Record<string, any>) => any) =
       return () => renderFn(props.size, attrs as Record<string, any>);
     }
   });
-
-const FaRobot = makeIcon((size, attrs) =>
-  h('svg', { ...attrs, width: size, height: size, viewBox: '0 0 24 24', fill: 'none', xmlns: 'http://www.w3.org/2000/svg' },
-    [
-      h('rect', { x: 4, y: 6, width: 16, height: 12, rx: 2, fill: 'currentColor', opacity: '0.1' }),
-      h('rect', { x: 7, y: 9, width: 3, height: 4, rx: 1, fill: 'currentColor' }),
-      h('rect', { x: 14, y: 9, width: 3, height: 4, rx: 1, fill: 'currentColor' }),
-      h('rect', { x: 10.5, y: 8, width: 3, height: 6, rx: 1, fill: 'currentColor' })
-    ]
-  )
-);
 
 const FaUserCircle = makeIcon((size, attrs) =>
   h('svg', { ...attrs, width: size, height: size, viewBox: '0 0 24 24', fill: 'none', xmlns: 'http://www.w3.org/2000/svg' },
@@ -284,11 +277,7 @@ const sendMessage = async (message: string | null, optionId: string | null = nul
     inputMessage.value = '';
 
     // Send to backend
-    const { message:msg,options:opt } = await $fetch<{
-      message: string;
-      options?: Option[];
-      requiresInput?: boolean;
-    }>(`${url}/api/chat/message`, {
+    const data = await $fetch<any>(`${url}/api/chat/message`, {
       method: 'POST',
       body: {
         sessionId: sessionId.value,
@@ -296,19 +285,21 @@ const sendMessage = async (message: string | null, optionId: string | null = nul
         optionId: optionId
       },
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        'Authorization': `Bearer ${token.value}`
       }
     });
 
     // Add bot response to state
-    const botMessage: Message = {
-      id: Date.now() + 1,
-      type: 'bot',
-      content: msg,
-      options: opt,
-    };
+    // const botMessage: Message = {
+    //   id: Date.now() + 1,
+    //   type: 'bot',
+    //   content: msg,
+    //   options: opt,
+    // };
 
-    messages.value = [...messages.value, botMessage];
+    console.log("data",data)
+
+    // messages.value = [...messages.value, botMessage];
     loading.value = false;
   } catch (error) {
     console.error('Error sending message:', error);
@@ -342,15 +333,17 @@ onMounted(async () => {
       const { message,options } = await $fetch<{
         message: string;
         options?: Option[];
-      }>('/api/chat/start', {
+      }>(`${url}/api/chat/start`, {
         method: 'POST',
         body: {
           sessionId: newSessionId
         },
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token.value}`
         }
       });
+
+      // console.log("message",message,"options",options);
       
       messages.value = [{
         id: Date.now(),
