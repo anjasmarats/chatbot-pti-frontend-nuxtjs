@@ -129,7 +129,8 @@
 import { h, defineComponent } from 'vue';
 const { token } = useToken()
 if (!token.value) {
-  console.error("error")
+  console.error("error token")
+  navigateTo('/auth/login')
 }
 
 /* Lightweight inline icon components to avoid external dependency */

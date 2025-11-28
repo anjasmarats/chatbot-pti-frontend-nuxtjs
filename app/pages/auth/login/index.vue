@@ -4,7 +4,7 @@
       <h1 class="login-title">Silahkan Login</h1>
       <form @submit.prevent="Login" class="login-form">
         <div class="input-group">
-          <FaUser class="input-icon" />
+          <i class="fa fa-user input-icon" aria-hidden="true"></i>
           <input
             type="text"
             placeholder="Nama Pengguna"
@@ -13,7 +13,7 @@
           />
         </div>
         <div class="input-group">
-          <FaLock class="input-icon" />
+          <i class="fa fa-lock input-icon" aria-hidden="true"></i>
           <input
             type="password"
             placeholder="Password"
@@ -22,7 +22,7 @@
           />
         </div>
         <button :disabled="loading" type="submit" class="login-button">
-          <CgSpinner v-if="loading" :size="20" /> Login
+          <i v-if="loading" class="fa fa-spinner fa-spin" style="margin-right:8px;" aria-hidden="true"></i> Login
         </button>
       </form>
     </div>
@@ -30,44 +30,28 @@
 </template>
 
 <script setup lang="ts">
-// import { FaUser, FaLock } from 'vue-icons/fa'
-// import { CgSpinner } from 'vue-icons/cg'
+// using Font Awesome CSS classes instead of vue-icons components
 import Swal from 'sweetalert2'
+import type { User } from '~/types/user'
+
+const { checkAuth } = useAuth()
+const { token } = useToken()
+const { setUser } = useUserStore()
+
+if (token.value) {
+  navigateTo('/')
+}
 
 // Reactive state
 const username = ref('')
 const password = ref('')
 const loading = ref(false)
 
-// Router
-const router = useRouter()
-
-// Auth check function
-const checkAuth = async (): Promise<boolean> => {
-  try {
-    const token = localStorage.getItem('token')
-    if (!token) return false
-
-    // Implement your auth validation logic here
-    // This should call your backend to validate the token
-    const { data } = await $fetch<any>('/api/auth/validate', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    
-    return data?.valid || false
-  } catch (error) {
-    console.error('Auth check error:', error)
-    return false
-  }
-}
-
 // Check authentication on mounted
 onMounted(async () => {
-  const isAuthenticated = await checkAuth()
+  const isAuthenticated = await checkAuth();
   if (isAuthenticated) {
-    router.push('/')
+    navigateTo('/auth/login')
   }
 })
 
@@ -79,8 +63,13 @@ const Login = async (e?: Event) => {
 
   try {
     loading.value = true
+
+    interface ApiResponse {
+      user:User,
+      token:string,
+    }
     
-    const { data } = await $fetch<any>('/api/login', {
+    const { data,error } = await useFetch<ApiResponse>(`${url}/api/login`, {
       method: 'POST',
       body: {
         username: username.value,
@@ -88,39 +77,37 @@ const Login = async (e?: Event) => {
       }
     })
 
+    if (error.value) {
+      loading.value = false;
+      if (error.value.statusCode===500) {
+        Swal.fire({
+          icon:"error",
+          title:"Error Server"
+        });
+
+        return;
+      } else {
+        Swal.fire({
+          icon:"error",
+          title:"Username atau Password Salah"
+        });
+
+        return;
+      }
+    }
+
+    token.value = data.value?data.value.token:null;
+    setUser(data.value?data.value.user:null);
+
     // const token = data.token
     // localStorage.setItem('token', token)
     // loading.value = false
 
     // router.push('/')
+    loading.value = false;
+    navigateTo('/')
   } catch (error: any) {
     loading.value = false
-    
-    if (error.response) {
-      if (error.response.status === 404) {
-        await Swal.fire({
-          icon: 'error',
-          title: 'Nama pengguna atau password salah'
-        })
-      } else if (error.response.status === 500) {
-        await Swal.fire({
-          icon: 'error',
-          title: 'Error Server'
-        })
-      } else {
-        console.error('error', error)
-        await Swal.fire({
-          icon: 'error',
-          title: 'Error'
-        })
-      }
-    } else {
-      console.error('error', error)
-      await Swal.fire({
-        icon: 'error',
-        title: 'Terjadi kesalahan'
-      })
-    }
   }
 }
 </script>

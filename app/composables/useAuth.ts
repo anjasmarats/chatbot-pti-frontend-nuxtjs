@@ -1,23 +1,40 @@
-export const useAuth = () => {
-  const checkAuth = async (): Promise<boolean> => {
-    const token = localStorage.getItem('token');
-    if (!token) return false;
+import type { User } from "~/types/user";
 
+export const useAuth = () => {
+  const { token } = useToken()
+
+  const { setUser } = useUserStore()
+  // Auth check function
+  const checkAuth = async (): Promise<boolean> => {
     try {
-      const { data } = await $fetch<{data:any}>('/api/auth/validate', {
+      if (!token.value) return false
+
+      // Implement your auth validation logic here
+      // This should call your backend to validate the token
+      const { error,data } = await useFetch<{data:User}>('/api/auth/', {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token.value}`
         }
-      });
-      return data.valid;
+      })
+      
+      if (error.value) {
+        token.value = null;
+        console.error("error checkAuth",error.value);
+        setUser(null)
+        return false;
+      }
+
+      setUser(data.value?.data|| null);
+      return true;
     } catch (error) {
-      localStorage.removeItem('token');
-      return false;
+      console.error('Auth check error:', error)
+      token.value=null;
+      return false
     }
-  };
+  }
 
   const logout = () => {
-    localStorage.removeItem('token');
+    token.value = null;
     navigateTo('/login');
   };
 
